@@ -6,6 +6,7 @@ from PyQt5.QtGui import QPixmap
 
 from Chem_calc_prog import Chem_calc
 from Elem_parameters_prog import Elem_parameters
+from Sub_name_prog import Sub_name
 
 
 class MyWidget(QMainWindow):
@@ -33,7 +34,9 @@ class MyWidget(QMainWindow):
         self.hide()
 
     def open_Sub_name(self):
-        print(self.sender().text())
+        self.Sub_name = Sub_name()
+        self.Sub_name.show()
+        self.hide()
 
     def open_Sub_parameters(self):
         print(self.sender().text())

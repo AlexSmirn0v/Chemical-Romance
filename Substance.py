@@ -12,3 +12,5 @@ class Substance:
     def get_type(self):
         pass
 
+    def get_name(self):
+        return 'Вода'
