@@ -1,3 +1,11 @@
+def under(stroke):
+    return f'<sub>{str(stroke)}</sub>'
+
+
+def up(stroke):
+    return f' <sup>{str(stroke)}</sup>'
+
+
 class Substance:
     def __init__(self, el_list):
         self.el_list = el_list
@@ -14,3 +22,9 @@ class Substance:
 
     def get_name(self):
         return 'Вода'
+
+    def get_valence(self):
+        pass
+
+    def get_oxi(self):
+        pass
