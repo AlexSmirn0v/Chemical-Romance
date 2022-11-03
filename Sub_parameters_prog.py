@@ -2,6 +2,7 @@ import sys
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
 from PyQt5 import QtCore, QtGui
+
 from Substance import Substance
 
 
@@ -14,11 +15,12 @@ def up(stroke):
 
 
 class Sub_parameters(QMainWindow):
-    def __init__(self, *args):
+    def __init__(self, parent=None, *args):
         super().__init__()
         uic.loadUi('Sub_parameters.ui', self)
         self.setWindowIcon(QtGui.QIcon('Chemical Romance round logo.svg'))
         #self.recolour()
+        self.parenter = parent
         self.initUI()
 
     def recolour(self):

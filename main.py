@@ -40,12 +40,12 @@ class MyWidget(QMainWindow):
         self.hide()
 
     def open_Sub_parameters(self):
-        self.Sub_parameters = Sub_parameters()
+        self.Sub_parameters = Sub_parameters(self)
         self.Sub_parameters.show()
         self.hide()
 
     def open_Elem_parameters(self):
-        self.Elem_parameters = Elem_parameters()
+        self.Elem_parameters = Elem_parameters(self)
         self.Elem_parameters.show()
         self.hide()
 

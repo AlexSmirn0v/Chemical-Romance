@@ -1304,7 +1304,7 @@ color: rgb(255, 255, 255);</string>
 color: rgb(255, 255, 255);</string>
        </property>
        <property name="text">
-        <string> Atomic weight:</string>
+        <string> Atomic mass:</string>
        </property>
       </widget>
      </item>
@@ -1385,8 +1385,14 @@ p, li { white-space: pre-wrap; }
    </property>
    <widget class="QMenu" name="menuBack">
     <property name="title">
-     <string>Back</string>
+     <string>Go to...</string>
     </property>
+    <addaction name="actionFront_page"/>
+    <addaction name="separator"/>
+    <addaction name="actionCalculation_of_chemical_reactions_2"/>
+    <addaction name="actionGetting_substance_name_2"/>
+    <addaction name="actionCalculation_of_substance_parameters_2"/>
+    <addaction name="actionCalculation_of_element_parameters_2"/>
    </widget>
    <widget class="QMenu" name="menuImportto">
     <property name="title">
@@ -1417,6 +1423,31 @@ p, li { white-space: pre-wrap; }
    </property>
   </action>
   <action name="actionCalculation_of_element_parameters">
+   <property name="text">
+    <string>Calculation of element parameters</string>
+   </property>
+  </action>
+  <action name="actionFront_page">
+   <property name="text">
+    <string>Front page</string>
+   </property>
+  </action>
+  <action name="actionCalculation_of_chemical_reactions_2">
+   <property name="text">
+    <string>Calculation of chemical reactions</string>
+   </property>
+  </action>
+  <action name="actionGetting_substance_name_2">
+   <property name="text">
+    <string>Getting substance name</string>
+   </property>
+  </action>
+  <action name="actionCalculation_of_substance_parameters_2">
+   <property name="text">
+    <string>Calculation of substance parameters</string>
+   </property>
+  </action>
+  <action name="actionCalculation_of_element_parameters_2">
    <property name="text">
     <string>Calculation of element parameters</string>
    </property>
