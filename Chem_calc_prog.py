@@ -13,9 +13,11 @@ class Chem_calc(Class_father):
         uic.loadUi('Chem_calc.ui', self)
         self.setWindowIcon(QtGui.QIcon('Chemical Romance round logo.svg'))
         self.parenter = parent
-        #self.recolour()
         self.initUI()
-        self.clearer()
+        if args:
+            self.first_sub = Substance(args[0][0])
+            self.temp_list = args[0][0]
+            self.htmler(str(self.first_sub))
 
     def resulter(self):
         self.sec_sub = Substance(self.temp_list)
@@ -28,6 +30,7 @@ class Chem_calc(Class_father):
 
     def clearer(self):
         self.textBrowser.setHtml(None)
+        self.first_sub, self.sec_sub = None, None
         self.temp_list = list()
 
 

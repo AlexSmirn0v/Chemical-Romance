@@ -152,17 +152,17 @@ class Class_father(QMainWindow):
         self.menubar.addAction(self.menuBack.menuAction())
         self.menubar.addAction(self.menuImportto.menuAction())
 
-        self.menuBack.setTitle("Go to...")
-        self.menuImportto.setTitle("Import to...")
-        self.actionCalculation_of_chemical_reactions.setText("Calculation of chemical reactions")
-        self.actionGetting_substance_name.setText("Getting substance name")
-        self.actionCalculation_of_substance_parameters.setText("Calculation of substance parameters")
-        self.actionCalculation_of_element_parameters.setText("Calculation of element parameters")
-        self.actionFront_page.setText("Front page")
-        self.actionCalculation_of_chemical_reactions_2.setText("Calculation of chemical reactions")
-        self.actionGetting_substance_name_2.setText("Getting substance name")
-        self.actionCalculation_of_substance_parameters_2.setText("Calculation of substance parameters")
-        self.actionCalculation_of_element_parameters_2.setText("Calculation of element parameters")
+        self.menuBack.setTitle("Перейти в...")
+        self.menuImportto.setTitle("Импортировать в...")
+        self.actionCalculation_of_chemical_reactions.setText("Расчёт химических реакций")
+        self.actionGetting_substance_name.setText("Получение названия вещества")
+        self.actionCalculation_of_substance_parameters.setText("Расчёт параметров вещества")
+        self.actionCalculation_of_element_parameters.setText("Расчёт параметров элемента")
+        self.actionFront_page.setText("Главная страница")
+        self.actionCalculation_of_chemical_reactions_2.setText("Расчёт химических реакций")
+        self.actionGetting_substance_name_2.setText("Получение названия вещества")
+        self.actionCalculation_of_substance_parameters_2.setText("Расчёт параметров вещества")
+        self.actionCalculation_of_element_parameters_2.setText("Расчёт параметров элемента")
 
         self.actionFront_page.triggered.connect(self.backer)
         self.openers = [self.actionCalculation_of_chemical_reactions_2,
@@ -184,15 +184,23 @@ class Class_father(QMainWindow):
         self.hide()
 
     def just_open(self):
-        if self.sender().text() == 'Calculation of chemical reactions':
+        if self.sender().text() == 'Расчёт химических реакций':
             self.parenter.open_Chem_calc()
-        elif self.sender().text() == 'Getting substance name':
+        elif self.sender().text() == 'Получение названия вещества':
             self.parenter.open_Sub_name()
-        elif self.sender().text() == 'Calculation of substance parameters':
+        elif self.sender().text() == 'Расчёт параметров вещества':
             self.parenter.open_Sub_parameters()
-        elif self.sender().text() == 'Calculation of element parameters':
+        elif self.sender().text() == 'Расчёт параметров элемента':
             self.parenter.open_Elem_parameters()
         self.hide()
 
     def arg_open(self):
-        pass
+        if self.sender().text() == 'Расчёт химических реакций':
+            self.parenter.open_Chem_calc(self.temp_list)
+        elif self.sender().text() == 'Получение названия вещества':
+            self.parenter.open_Sub_name(self.temp_list)
+        elif self.sender().text() == 'Расчёт параметров вещества':
+            self.parenter.open_Sub_parameters(self.temp_list)
+        elif self.sender().text() == 'Расчёт параметров элемента':
+            self.parenter.open_Elem_parameters(self.temp_list)
+        self.hide()

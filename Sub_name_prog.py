@@ -14,6 +14,10 @@ class Sub_name(Class_father):
         self.setWindowIcon(QtGui.QIcon('Chemical Romance round logo.svg'))
         self.parenter = parent
         self.initUI()
+        if args:
+            self.first_sub = Substance(args[0][0])
+            self.temp_list = args[0][0]
+            self.htmler(str(self.first_sub))
 
     def resulter(self):
         self.first_sub = Substance(self.temp_list)

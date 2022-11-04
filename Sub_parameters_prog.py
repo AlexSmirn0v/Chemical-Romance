@@ -15,14 +15,18 @@ class Sub_parameters(Class_father):
         self.setWindowIcon(QtGui.QIcon('Chemical Romance round logo.svg'))
         self.parenter = parent
         self.initUI()
+        if args:
+            self.first_sub = Substance(args[0][0])
+            self.temp_list = args[0][0]
+            self.htmler(str(self.first_sub))
 
     def resulter(self):
         self.sub = Substance(self.temp_list)
-        self.Valence_Oxidation.setHtml(f'Valence: {self.sub.get_valence}<br>Oxidation state: {self.sub.get_oxi}')
+        self.Valence_Oxidation.setHtml(f'Валентность: {self.sub.get_valence}<br>Степень окисления: {self.sub.get_oxi}')
 
     def clearer(self):
         self.textBrowser.setHtml(None)
-        self.Valence_Oxidation.setHtml('Valence: <br>Oxidation state:')
+        self.Valence_Oxidation.setHtml('Валентность: <br>Степень окисления: ')
         self.temp_list = list()
 
 

@@ -535,7 +535,7 @@
      <rect>
       <x>10</x>
       <y>360</y>
-      <width>1001</width>
+      <width>991</width>
       <height>281</height>
      </rect>
     </property>
@@ -548,8 +548,13 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>Calculation of substance parameters</string>
+        <string>Расчёт параметров вещества</string>
        </property>
       </widget>
      </item>
@@ -561,8 +566,13 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>Getting substance name</string>
+        <string>Получение названия вещества</string>
        </property>
       </widget>
      </item>
@@ -574,8 +584,13 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>Calculation of chemical reactions</string>
+        <string>Расчёт химических реакций</string>
        </property>
       </widget>
      </item>
@@ -587,8 +602,13 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+        </font>
+       </property>
        <property name="text">
-        <string>Calculation of element parameters</string>
+        <string>Расчёт параметров элемента</string>
        </property>
       </widget>
      </item>

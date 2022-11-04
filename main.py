@@ -29,23 +29,35 @@ class MyWidget(QMainWindow):
         self.subParameters.clicked.connect(self.open_Sub_parameters)
         self.elemParameters.clicked.connect(self.open_Elem_parameters)
 
-    def open_Chem_calc(self):
-        self.Chem_calc = Chem_calc(self)
+    def open_Chem_calc(self, *args):
+        if args and (args[0] is not False):
+            self.Chem_calc = Chem_calc(self, args)
+        else:
+            self.Chem_calc = Chem_calc(self)
         self.Chem_calc.show()
         self.hide()
 
-    def open_Sub_name(self):
-        self.Sub_name = Sub_name(self)
+    def open_Sub_name(self, *args):
+        if args and (args[0] is not False):
+            self.Sub_name = Sub_name(self, args)
+        else:
+            self.Sub_name = Sub_name(self)
         self.Sub_name.show()
         self.hide()
 
-    def open_Sub_parameters(self):
-        self.Sub_parameters = Sub_parameters(self)
+    def open_Sub_parameters(self, *args):
+        if args and (args[0] is not False):
+            self.Sub_parameters = Sub_parameters(self, args)
+        else:
+            self.Sub_parameters = Sub_parameters(self)
         self.Sub_parameters.show()
         self.hide()
 
-    def open_Elem_parameters(self):
-        self.Elem_parameters = Elem_parameters(self)
+    def open_Elem_parameters(self, *args):
+        if args and (args[0] is not False):
+            self.Elem_parameters = Elem_parameters(self, args)
+        else:
+            self.Elem_parameters = Elem_parameters(self)
         self.Elem_parameters.show()
         self.hide()
 

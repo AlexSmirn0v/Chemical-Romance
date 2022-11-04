@@ -13,15 +13,27 @@ class Elem_parameters(Class_father):
         self.setWindowIcon(QtGui.QIcon('Chemical Romance round logo.svg'))
         self.parenter = parent
         self.initUI()
+        if args:
+            n = 0
+            while type(args[0][0][n]) == int:
+                n += 1
+            text = args[0][0][n]
+            el_params = elem_parameters(text)
+            self.textBrowser.setPlainText(text)
+            self.Name.setText(' Имя: ' + el_params[2])
+            self.Atomic_weight.setText(' Атомная масса: ' + str(round(el_params[3], 2)))
+            self.Electronegativity.setText(' Эл-отрицательность: ' + str(round(el_params[4], 2)))
+            self.Electronic_structure.setHtml('Электронная структура: ' + self.elem_structure(el_params))
 
     def printer(self):
         text = self.sender().text().split('. ')[1]
+        self.temp_list = [text]
         el_params = elem_parameters(text)
         self.textBrowser.setPlainText(text)
-        self.Name.setText(' Name: ' + el_params[2])
-        self.Atomic_weight.setText(' Atomic mass: ' + str(round(el_params[3], 2)))
-        self.Electronegativity.setText(' Electronegativity: ' + str(round(el_params[4], 2)))
-        self.Electronic_structure.setHtml('Electronic structure: ' + self.elem_structure(el_params))
+        self.Name.setText(' Имя: ' + el_params[2])
+        self.Atomic_weight.setText(' Атомная масса: ' + str(round(el_params[3], 2)))
+        self.Electronegativity.setText(' Эл-отрицательность: ' + str(round(el_params[4], 2)))
+        self.Electronic_structure.setHtml('Электронная структура: ' + self.elem_structure(el_params))
 
     def elem_structure(self, parameters):
         spdf = [('s', 2), ('p', 6), ('d', 10)]
@@ -63,10 +75,10 @@ class Elem_parameters(Class_father):
 
     def clearer(self):
         self.textBrowser.setPlainText(None)
-        self.Name.setText(' Name: ')
-        self.Atomic_weight.setText(' Atomic mass: ')
-        self.Electronegativity.setText(' Electronegativity: ')
-        self.Electronic_structure.setHtml('Electronic structure: ')
+        self.Name.setText(' Имя: ')
+        self.Atomic_weight.setText(' Атомная масса: ')
+        self.Electronegativity.setText(' Эл-отрицательность: ')
+        self.Electronic_structure.setHtml('Электронная структура: ')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

@@ -14,3 +14,5 @@ def elem_parameters(name):
     a = connection.cursor().execute("""SELECT * FROM elements WHERE symbol = ?""", (name,)).fetchone()
     connection.commit()
     return a
+
+print(type(True) == bool)
