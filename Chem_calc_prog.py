@@ -8,10 +8,11 @@ from Class_father import Class_father
 
 
 class Chem_calc(Class_father):
-    def __init__(self, *args):
+    def __init__(self, parent=None, *args):
         super().__init__()
         uic.loadUi('Chem_calc.ui', self)
         self.setWindowIcon(QtGui.QIcon('Chemical Romance round logo.svg'))
+        self.parenter = parent
         #self.recolour()
         self.initUI()
         self.clearer()

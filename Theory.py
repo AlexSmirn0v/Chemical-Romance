@@ -6,7 +6,7 @@ def under(stroke):
 
 
 def up(stroke):
-    return f' <sup>{str(stroke)}</sup>'
+    return f'<sup>{str(stroke)}</sup>'
 
 
 def elem_parameters(name):

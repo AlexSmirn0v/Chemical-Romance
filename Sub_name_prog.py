@@ -8,10 +8,11 @@ from Class_father import Class_father
 
 
 class Sub_name(Class_father):
-    def __init__(self, *args):
+    def __init__(self, parent=None, *args):
         super().__init__()
         uic.loadUi('Sub_name.ui', self)
         self.setWindowIcon(QtGui.QIcon('Chemical Romance round logo.svg'))
+        self.parenter = parent
         self.initUI()
 
     def resulter(self):

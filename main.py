@@ -30,12 +30,12 @@ class MyWidget(QMainWindow):
         self.elemParameters.clicked.connect(self.open_Elem_parameters)
 
     def open_Chem_calc(self):
-        self.Chem_calc = Chem_calc()
+        self.Chem_calc = Chem_calc(self)
         self.Chem_calc.show()
         self.hide()
 
     def open_Sub_name(self):
-        self.Sub_name = Sub_name()
+        self.Sub_name = Sub_name(self)
         self.Sub_name.show()
         self.hide()
 
