@@ -23,10 +23,12 @@ class Sub_name(Class_father):
         self.first_sub = Substance(self.temp_list)
         self.htmler(' => ')
         self.Name.setPlainText(self.first_sub.get_name())
+        self.Type.setText('Тип: ' + self.first_sub.get_type())
 
     def clearer(self):
         self.textBrowser.setHtml(None)
         self.Name.setHtml(None)
+        self.Type.setText('Тип: ')
         self.temp_list = list()
 
 
