@@ -20,9 +20,9 @@ class Elem_parameters(Class_father):
             text = args[0][0][n]
             el_params = elem_parameters(text)
             self.textBrowser.setPlainText(text)
-            self.Name.setText(' Имя: ' + el_params[2])
-            self.Atomic_weight.setText(' Атомная масса: ' + str(round(el_params[3], 2)))
-            self.Electronegativity.setText(' Эл-отрицательность: ' + str(round(el_params[4], 2)))
+            self.Name.setText(' Имя: ' + el_params['rusName'])
+            self.Atomic_weight.setText(' Атомная масса: ' + str(round(el_params['weight'], 2)))
+            self.Electronegativity.setText(' Эл-отрицательность: ' + str(round(el_params['electronegativity'], 2)))
             self.Electronic_structure.setHtml('Электронная структура: ' + self.elem_structure(el_params))
 
     def printer(self):
@@ -30,16 +30,16 @@ class Elem_parameters(Class_father):
         self.temp_list = [text]
         el_params = elem_parameters(text)
         self.textBrowser.setPlainText(text)
-        self.Name.setText(' Имя: ' + el_params[2])
-        self.Atomic_weight.setText(' Атомная масса: ' + str(round(el_params[3], 2)))
-        self.Electronegativity.setText(' Эл-отрицательность: ' + str(round(el_params[4], 2)))
+        self.Name.setText(' Имя: ' + el_params['rusName'])
+        self.Atomic_weight.setText(' Атомная масса: ' + str(round(el_params['weight'], 2)))
+        self.Electronegativity.setText(' Эл-отрицательность: ' + str(round(el_params['electronegativity'], 2)))
         self.Electronic_structure.setHtml('Электронная структура: ' + self.elem_structure(el_params))
 
     def elem_structure(self, parameters):
         spdf = [('s', 2), ('p', 6), ('d', 10)]
-        number = parameters[0]
-        group = parameters[-2]
-        period = parameters[-1]
+        number = parameters['number']
+        group = parameters['group']
+        period = parameters['period']
         counter = 0
         res = str()
         if number in (24, 29, 41, 42, 44, 45, 47):
