@@ -1,9 +1,4 @@
-def under(stroke):
-    return f'<sub>{str(stroke)}</sub>'
-
-
-def up(stroke):
-    return f' <sup>{str(stroke)}</sup>'
+from Theory import up, under
 
 
 class Substance:
