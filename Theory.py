@@ -118,6 +118,10 @@ def charge(ion):
             return -2
         elif ion == 'F':
             return -1
+        elif ion == 'Fe':
+            return 2, 3
+        elif ion == 'Hg':
+            return 1, 2
         elif ion in CATIONS:
             for row in reader:
                 if row['Ион'] == 'Заряд +':

@@ -25,6 +25,8 @@ class Sub_parameters(Class_father):
         res_oxi = self.sub.get_oxi()
         if self.sub.only_el_str == 'H2O':
             res_sol = 'Растворима ли вода в воде?'
+        elif self.sub.only_el_str == 'OF2':
+            res_sol = 'Вещество не растворимо в воде'
         else:
             is_sol = isSoluble(self.sub)
             if is_sol:

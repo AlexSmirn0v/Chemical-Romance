@@ -6,9 +6,11 @@ class DoesNotExistError(Exception):
     pass
 
 
+
 class Substance:
     def __init__(self, el_list):
         self.el_list = el_list
+        self.any_error = False
         self.__str__()
         self.fpart = self.get_fpart()
         self.spart = self.get_spart()
@@ -24,7 +26,36 @@ class Substance:
         return self.el_str
 
     def __add__(self, other):
-        return str(self) + ' + ' + str(other)
+        try:
+            #don't forget to delete!!
+            other = Substance(other)
+            if {self.get_type(), other.get_type()} == ({'Основный оксид', 'Кислотный оксид'} or
+                                                       {'Амфотерный оксид', 'Кислотный оксид'} or
+                                                       {'Основный оксид', 'Амфотерный оксид'}):
+                pass
+            elif {self.get_type(), other.get_type()} == ({'Кислота', 'Основание'} or
+                                                         {'Кислота', 'Щёлочь'}):
+                pass
+            elif {self.get_type(), other.get_type()} == ({'Основный оксид', 'Кислота'} or
+                                                         {'Амфотерный оксид', 'Кислота'}):
+                pass
+            elif {self.get_type(), other.get_type()} == ({'Кислотный оксид', 'Щёлочь'} or
+                                                         {'Амфотерный оксид', 'Щёлочь'}):
+                pass
+            elif {self.get_type(), other.get_type()} == {'Соль', 'Щёлочь'}:
+                pass
+            elif {self.get_type(), other.get_type()} == {'Соль', 'Кислота'}:
+                pass
+            elif (self.get_type() and other.get_type()) == 'Соль':
+                pass
+            elif {self.get_type(), other.get_type()} == {'Кислотный оксид', 'Вода'}:
+                pass
+            elif {self.get_type(), other.get_type()} == {'Основный оксид', 'Вода'}:
+                pass
+            else:
+                raise DoesNotExistError
+        except DoesNotExistError:
+            return 'Ошибка ввода или невозможная реакция'
 
     def get_particles_number(self):
         try:
@@ -71,10 +102,10 @@ class Substance:
                 self.name = ('Гидрид ' +
                              gentle(elem_parameters(self.fpart)['rusName'] if self.fpart != 'NH4' else 'аммоний'))
                 return 'Гидрид'
-            elif self.spart[0] == 'F':
+            elif self.only_el_str == 'OF2':
                 self.name = ('Фторид ' +
                              gentle(elem_parameters(self.fpart)['rusName'] if self.fpart != 'NH4' else 'аммоний'))
-                return 'Фторид'
+                return 'Соль'
             elif self.fpart == 'H' and self.spart == 'O' and self.only_el_str != 'H2O2':
                 self.name = 'Вода'
                 return 'Вода'
@@ -110,6 +141,7 @@ class Substance:
             else:
                 raise DoesNotExistError
         except DoesNotExistError:
+            self.any_error = True
             self.name = 'Ошибка ввода или несуществующее соединение'
             return 'Ошибка ввода'
 
@@ -120,16 +152,20 @@ class Substance:
     def get_oxi(self):
         try:
             self.oxis = list()
+            if self.spart == 'H':
+                b = -1
+            else:
+                b = charge(self.spart)
             if (self.spart is None or self.spart == '') and len(self.fpart_list) == 1:
                 self.oxis = [0]
             elif self.only_el_str == 'OF2':
                 self.oxis = [1, -1]
-            elif (charge(self.fpart) or charge(self.spart)) is None:
+            elif (charge(self.fpart) or b) is None:
                 print(charge(self.fpart) is None)
-                print(charge(self.spart) is None)
+                print(b is None)
                 raise DoesNotExistError
-            elif (self.get_particles_number()[0] * charge(self.fpart) +
-                  self.get_particles_number()[1] * charge(self.spart)) != 0:
+            elif (self.part_number[0] * charge(self.fpart) +
+                  self.part_number[1] * b) != 0:
                 raise DoesNotExistError
             else:
                 turner = False
@@ -183,7 +219,7 @@ class Substance:
                     for i in elems:
                         summer += elems[i][0] * elems[i][1]
                     if turner:
-                        found_grade1 = set(sym.solveset(summer - charge(self.spart), y)).pop()
+                        found_grade1 = set(sym.solveset(summer - b, y)).pop()
                     for item in elems:
                         self.oxis.append(elems[item][1] if type(elems[item][1]) == int else found_grade1)
 
@@ -205,6 +241,10 @@ class Substance:
                     a += 1
             return ''.join(el_lister)
         except DoesNotExistError:
+            self.any_error = True
+            return 'Ошибка ввода или несуществующее соединение'
+        except TypeError:
+            self.any_error = True
             return 'Ошибка ввода или несуществующее соединение'
 
     def get_fpart(self):
@@ -230,14 +270,17 @@ class Substance:
             elems = self.el_list[self.n + 1:]
         else:
             elems = self.el_list[self.n + 1:]
-        if len(elems) == 2 and elems != ['O', 'H']:
+        if len(elems) == 2 and elems[1] != 'H':
             elems = elems[0]
         self.spart_list = elems
         return ''.join(map(str, elems))
 
 
+Hydrogen = Substance(['H', 2])
+Water = Substance(['H', 2, 'O'])
+
 if __name__ == '__main__':
-    dioxide = Substance([3, 'O', 'F', 2])
+    dioxide = Substance(['Fe', 2, 'O', 3])
     print(dioxide.get_fpart())
     print(dioxide.get_spart())
     print(dioxide.get_name(), dioxide.get_oxi())
