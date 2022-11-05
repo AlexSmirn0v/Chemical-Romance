@@ -23,13 +23,16 @@ class Sub_parameters(Class_father):
     def resulter(self):
         self.sub = Substance(self.temp_list)
         res_oxi = self.sub.get_oxi()
-        is_sol = isSoluble(self.sub)
-        if is_sol:
-            res_sol = 'Вещество растворимо в воде'
-        elif is_sol is None:
-            res_sol = 'Ошибка ввода или несуществующее соединение'
+        if self.sub.only_el_str == 'H2O':
+            res_sol = 'Растворима ли вода в воде?'
         else:
-            res_sol = 'Вещество не растворимо в воде'
+            is_sol = isSoluble(self.sub)
+            if is_sol:
+                res_sol = 'Вещество растворимо в воде'
+            elif is_sol is None:
+                res_sol = 'Ошибка ввода или несуществующее соединение'
+            else:
+                res_sol = 'Вещество не растворимо в воде'
 
         self.Valence_Oxidation.setHtml(f'Степень окисления: {res_oxi}<br>{res_sol}')
 
