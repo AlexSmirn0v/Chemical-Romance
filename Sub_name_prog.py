@@ -7,6 +7,10 @@ from Theory import up, under
 from Class_father import Class_father
 
 
+class DoesNotExistError(Exception):
+    pass
+
+
 class Sub_name(Class_father):
     def __init__(self, parent=None, *args):
         super().__init__()

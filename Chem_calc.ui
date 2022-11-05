@@ -4670,6 +4670,7 @@ color: rgb(255, 255, 255);</string>
     </layout>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -4679,20 +4680,7 @@ color: rgb(255, 255, 255);</string>
      <height>25</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuSettings">
-    <property name="title">
-     <string>Settings</string>
-    </property>
-   </widget>
-   <addaction name="menuFile"/>
-   <addaction name="menuSettings"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

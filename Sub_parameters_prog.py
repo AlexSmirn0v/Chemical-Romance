@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
 from PyQt5 import QtCore, QtGui
 
 from Substance import Substance
-from Theory import up, under
+from Theory import up, under, isSoluble
 from Class_father import Class_father
 
 
@@ -22,11 +22,20 @@ class Sub_parameters(Class_father):
 
     def resulter(self):
         self.sub = Substance(self.temp_list)
-        self.Valence_Oxidation.setHtml(f'Валентность: {self.sub.get_valence}<br>Степень окисления: {self.sub.get_oxi}')
+        res_oxi = self.sub.get_oxi()
+        is_sol = isSoluble(self.sub)
+        if is_sol:
+            res_sol = 'Вещество растворимо в воде'
+        elif is_sol is None:
+            res_sol = 'Ошибка ввода или несуществующее соединение'
+        else:
+            res_sol = 'Вещество не растворимо в воде'
+
+        self.Valence_Oxidation.setHtml(f'Степень окисления: {res_oxi}<br>{res_sol}')
 
     def clearer(self):
         self.textBrowser.setHtml(None)
-        self.Valence_Oxidation.setHtml('Валентность: <br>Степень окисления: ')
+        self.Valence_Oxidation.setHtml('Степень окисления:<br>Растворимость в воде')
         self.temp_list = list()
 
 
