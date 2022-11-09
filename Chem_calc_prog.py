@@ -1,6 +1,6 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
-from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import QApplication
+from PyQt5 import QtGui
 from Substance import Substance
 from Class_father import Class_father
 from Chem_calc import Ui_MainWindow
@@ -14,16 +14,13 @@ class Chem_calc(Ui_MainWindow, Class_father):
         self.parenter = parent
         self.initUI()
         if args:
-            print(args[0][0])
             self.first_sub = Substance(args[0][0])
             self.temp_list = args[0][0]
             self.htmler(str(self.first_sub))
 
     def resulter(self):
         self.sec_sub = Substance(self.temp_list)
-        print(self.first_sub)
         tulip = self.first_sub + self.sec_sub
-        print(' + '.join(map(str, tulip)))
         self.htmler(' => ' + ' + '.join(map(str, tulip)))
         if tulip[0] is Substance:
             self.temp_list = tulip[0].el_list
