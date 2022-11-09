@@ -1,31 +1,36 @@
 import sys
-from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
 from PyQt5 import QtCore, QtGui
 from Substance import Substance
-from Theory import up, under
 from Class_father import Class_father
+from Chem_calc import Ui_MainWindow
 
 
-class Chem_calc(Class_father):
+class Chem_calc(Ui_MainWindow, Class_father):
     def __init__(self, parent=None, *args):
         super().__init__()
-        uic.loadUi('Chem_calc.ui', self)
+        self.setupUi(self)
         self.setWindowIcon(QtGui.QIcon('Chemical Romance round logo.svg'))
         self.parenter = parent
         self.initUI()
         if args:
+            print(args[0][0])
             self.first_sub = Substance(args[0][0])
             self.temp_list = args[0][0]
             self.htmler(str(self.first_sub))
 
     def resulter(self):
         self.sec_sub = Substance(self.temp_list)
-        self.htmler(' => ' + str(self.first_sub + self.sec_sub))
+        print(self.first_sub)
+        tulip = self.first_sub + self.sec_sub
+        print(tulip)
+        self.htmler(' => ' + ' + '.join(map(str, tulip)))
+        self.temp_list = tulip[0]
 
     def pluser(self):
         self.htmler(' + ')
-        self.first_sub = Substance(self.temp_list)
+        self.first_sub = Substance(self.temp_list.copy())
+        print(self.first_sub)
         self.temp_list.clear()
 
     def clearer(self):

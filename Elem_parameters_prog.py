@@ -1,15 +1,16 @@
 import sys
-from PyQt5 import uic
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
 from PyQt5 import QtCore, QtGui
-from Theory import up, under, elem_parameters
+from Theory import up, elem_parameters
 from Class_father import Class_father
+from Elem_parameters import Ui_MainWindow
 
 
-class Elem_parameters(Class_father):
+class Elem_parameters(Ui_MainWindow, Class_father):
     def __init__(self, parent=None, *args):
         super().__init__()
-        uic.loadUi('Elem_parameters.ui', self)
+        self.setupUi(self)
         self.setWindowIcon(QtGui.QIcon('Chemical Romance round logo.svg'))
         self.parenter = parent
         self.initUI()

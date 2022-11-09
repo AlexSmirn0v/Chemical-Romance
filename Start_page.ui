@@ -550,7 +550,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>13</pointsize>
         </font>
        </property>
        <property name="text">
@@ -568,7 +568,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>13</pointsize>
         </font>
        </property>
        <property name="text">
@@ -586,7 +586,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>13</pointsize>
         </font>
        </property>
        <property name="text">
@@ -604,7 +604,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>14</pointsize>
+         <pointsize>13</pointsize>
         </font>
        </property>
        <property name="text">

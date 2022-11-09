@@ -1,61 +1,161 @@
-from Theory import up, under, isSoluble, elem_parameters, CATIONS, ANIONS, NAME, gentle, charge
+from Theory import up, under, isSoluble, elem_parameters, CATIONS, ANIONS, NAME, gentle, \
+    charge, substance_maker, METAL_ACTIVENESS
 import sympy as sym
+from math import lcm
+
+Hydrogen = ['H', 2]
+Water = ['H', 2, 'O']
 
 
 class DoesNotExistError(Exception):
     pass
 
 
-
 class Substance:
-    def __init__(self, el_list):
+    def __init__(self, el_list, html=False):
+        self.isHtml = html
         self.el_list = el_list
         self.any_error = False
-        self.__str__()
+        x = list(map(str, self.el_list))
+        if x[0].isnumeric():
+            del x[0]
+        self.only_el_str = ''.join(x)
+        self.__str__
         self.fpart = self.get_fpart()
         self.spart = self.get_spart()
         self.part_number = self.get_particles_number()
         self.name = str()
 
     def __str__(self):
-        x = list(map(str, self.el_list))
-        self.el_str = ''.join(x)
-        if x[0].isnumeric():
-            del x[0]
-        self.only_el_str = ''.join(x)
+        if self.isHtml:
+            res = list()
+            for index, elem in enumerate(self.el_list):
+                if type(elem) == int and index != 0:
+                    res.append(under(elem))
+                else:
+                    res.append(str(elem))
+            self.el_str = ''.join(res)
+        else:
+            self.el_str = ''.join(map(str, self.el_list))
         return self.el_str
 
     def __add__(self, other):
         try:
-            #don't forget to delete!!
-            other = Substance(other)
-            if {self.get_type(), other.get_type()} == ({'Основный оксид', 'Кислотный оксид'} or
-                                                       {'Амфотерный оксид', 'Кислотный оксид'} or
-                                                       {'Основный оксид', 'Амфотерный оксид'}):
-                pass
-            elif {self.get_type(), other.get_type()} == ({'Кислота', 'Основание'} or
-                                                         {'Кислота', 'Щёлочь'}):
-                pass
-            elif {self.get_type(), other.get_type()} == ({'Основный оксид', 'Кислота'} or
-                                                         {'Амфотерный оксид', 'Кислота'}):
-                pass
-            elif {self.get_type(), other.get_type()} == ({'Кислотный оксид', 'Щёлочь'} or
-                                                         {'Амфотерный оксид', 'Щёлочь'}):
+            elems_list_1 = list()
+            elems_list_2 = list()
+            # don't forget to delete!!
+            #other = Substance(other)
+            if {self.get_type(), other.get_type()} in [{'Основный оксид', 'Кислотный оксид'},
+                                                       {'Амфотерный оксид', 'Кислотный оксид'},
+                                                       {'Основный оксид', 'Амфотерный оксид'}]:
+                if (other.get_type() == 'Основный оксид'
+                        and self.get_type() == ('Амфотерный оксид' or 'Кислотный оксид')):
+                    begin_part = other.fpart_list
+                    begin_part_number = other.get_particles_number()[0]
+                    middle_part = self.fpart_list
+                    middle_part_number = self.get_particles_number()[0]
+                elif (other.get_type() == ('Основный оксид' or 'Амфотерный оксид')
+                      and self.get_type() == 'Кислотный оксид'):
+                    begin_part = other.fpart_list
+                    begin_part_number = other.get_particles_number()[0]
+                    middle_part = self.fpart_list
+                    middle_part_number = self.get_particles_number()[0]
+                elif (self.get_type() == 'Основный оксид'
+                      and other.get_type() == ('Амфотерный оксид' or 'Кислотный оксид')):
+                    begin_part = self.fpart_list
+                    begin_part_number = self.get_particles_number()[0]
+                    middle_part = other.fpart_list
+                    middle_part_number = other.get_particles_number()[0]
+                elif (self.get_type() == ('Основный оксид' or 'Амфотерный оксид')
+                      and other.get_type() == 'Кислотный оксид'):
+                    begin_part = self.fpart_list
+                    begin_part_number = self.get_particles_number()[0]
+                    middle_part = other.fpart_list
+                    middle_part_number = other.get_particles_number()[0]
+
+                elems_list_1.extend(begin_part)
+                if begin_part_number != 1:
+                    elems_list_1.append(begin_part_number)
+                elems_list_1.extend(middle_part)
+                if middle_part_number != 1:
+                    elems_list_1.append(middle_part_number)
+                elems_list_1.extend(['O', self.get_particles_number()[1] + other.get_particles_number()[1]])
+                return Substance(elems_list_1, html=True),
+
+            elif {self.get_type(), other.get_type()} in [{'Кислота', 'Основание'},
+                                                         {'Кислота', 'Щёлочь'}]:
+                acid = list(filter(lambda x: x.get_type() == 'Кислота', [self, other]))[0]
+                alkali = list(filter(lambda x: x.get_type() != 'Кислота', [self, other]))[0]
+
+                elems_list_1 = substance_maker(alkali.fpart_list, acid.spart_list,
+                                               alkali.get_particles_number()[0], acid.get_particles_number()[1])
+                if alkali.get_particles_number()[1] != 1:
+                    elems_list_2.append(alkali.get_particles_number()[1])
+                elems_list_2.extend(Water)
+
+            elif {self.get_type(), other.get_type()} in [{'Основный оксид', 'Кислота'},
+                                                         {'Амфотерный оксид', 'Кислота'}]:
+                acid = list(filter(lambda x: x.get_type() == 'Кислота', [self, other]))[0]
+                oxide = list(filter(lambda x: x.get_type() != 'Кислота', [self, other]))[0]
+
+                elems_list_1 = substance_maker(oxide.fpart_list, acid.spart_list,
+                                               oxide.get_particles_number()[0], acid.get_particles_number()[1])
+                if oxide.get_particles_number()[1] != 1:
+                    elems_list_2.append(oxide.get_particles_number()[1])
+                elems_list_2.extend(Water)
+            elif {self.get_type(), other.get_type()} in [{'Кислотный оксид', 'Щёлочь'},
+                                                         {'Амфотерный оксид', 'Щёлочь'}]:
                 pass
             elif {self.get_type(), other.get_type()} == {'Соль', 'Щёлочь'}:
-                pass
+                salt = list(filter(lambda x: x.get_type() == 'Соль', [self, other]))[0]
+                alkali = list(filter(lambda x: x.get_type() != 'Соль', [self, other]))[0]
+
+                if isSoluble(salt):
+                    elems_list_1 = substance_maker(salt.fpart_list, alkali.spart_list,
+                                                   salt.part_number[0], alkali.part_number[1])
+                    elems_list_2 = substance_maker(alkali.fpart_list, salt.spart_list,
+                                                   alkali.part_number[0], salt.part_number[1])
+                    if isSoluble(Substance(elems_list_1)) and not isSoluble(Substance(elems_list_2)):
+                        pass
+                    elif isSoluble(Substance(elems_list_2)) and not isSoluble(Substance(elems_list_1)):
+                        pass
+                    else:
+                        raise DoesNotExistError
             elif {self.get_type(), other.get_type()} == {'Соль', 'Кислота'}:
                 pass
             elif (self.get_type() and other.get_type()) == 'Соль':
-                pass
+                f_salt = self
+                s_salt = other
+
+                if isSoluble(f_salt) and isSoluble(s_salt):
+                    elems_list_1 = substance_maker(f_salt.fpart_list, s_salt.spart_list,
+                                                   f_salt.get_particles_number()[0], s_salt.get_particles_number()[1])
+                    elems_list_2 = substance_maker(s_salt.fpart_list, f_salt.spart_list,
+                                                   s_salt.get_particles_number()[0], f_salt.get_particles_number()[1])
+                    if isSoluble(Substance(elems_list_1)) and not isSoluble(Substance(elems_list_2)):
+                        pass
+                    elif isSoluble(Substance(elems_list_2)) and not isSoluble(Substance(elems_list_1)):
+                        pass
+                    else:
+                        raise DoesNotExistError
+
             elif {self.get_type(), other.get_type()} == {'Кислотный оксид', 'Вода'}:
                 pass
             elif {self.get_type(), other.get_type()} == {'Основный оксид', 'Вода'}:
-                pass
+                water = list(filter(lambda x: x.only_el_str == 'H2O', [self, other]))[0]
+                oxide = list(filter(lambda x: x.only_el_str != 'H2O', [self, other]))[0]
+                if oxide.get_fpart() in METAL_ACTIVENESS[:METAL_ACTIVENESS.index('Mg')]:
+                    elems_list_1 = substance_maker(oxide.fpart_list, ["O", 'H'],
+                                                   oxide.get_particles_number()[0], water.get_particles_number()[0])
+                    return Substance(elems_list_1, html=True),
             else:
+                print({self.get_type(), other.get_type()} in [{'Основный оксид', 'Кислота'},
+                                                              {'Амфотерный оксид', 'Кислота'}])
                 raise DoesNotExistError
+            return Substance(elems_list_1, html=True), Substance(elems_list_2, html=True)
         except DoesNotExistError:
-            return 'Ошибка ввода или невозможная реакция'
+            return '''Ошибка ввода или невозможная реакция. 
+            Возможно, опечатка в коэффициентах'''
 
     def get_particles_number(self):
         try:
@@ -79,7 +179,6 @@ class Substance:
                 s_koef = self.el_list[-1]
             else:
                 s_koef = 1
-
             return koef * f_koef, koef * s_koef
         except IndexError:
             pass
@@ -110,7 +209,6 @@ class Substance:
                 self.name = 'Вода'
                 return 'Вода'
             elif self.fpart == 'H' and self.spart in ANIONS and self.only_el_str == NAME[self.spart][2]:
-                print(NAME[self.spart][2])
                 self.name = NAME[self.spart][1] + ' кислота'
                 return 'Кислота'
             elif self.fpart in CATIONS and 'H' not in self.fpart and self.spart in ANIONS:
@@ -161,8 +259,6 @@ class Substance:
             elif self.only_el_str == 'OF2':
                 self.oxis = [1, -1]
             elif (charge(self.fpart) or b) is None:
-                print(charge(self.fpart) is None)
-                print(b is None)
                 raise DoesNotExistError
             elif (self.part_number[0] * charge(self.fpart) +
                   self.part_number[1] * b) != 0:
@@ -189,7 +285,6 @@ class Substance:
                         elems[elem] = [number, grade]
                 for i in elems:
                     summer += elems[i][0] * elems[i][1]
-                print(summer)
                 if turner:
                     found_grade = set(sym.solveset(summer - charge(self.fpart), x)).pop()
                 for item in elems:
@@ -237,7 +332,7 @@ class Substance:
                         symb = ''
                     elif self.oxis[a] < 0:
                         symb = '-'
-                    el_lister.append(up(str(abs(self.oxis[a])) + symb))
+                    el_lister.append(up(symb + str(abs(self.oxis[a]))))
                     a += 1
             return ''.join(el_lister)
         except DoesNotExistError:
@@ -271,16 +366,15 @@ class Substance:
         else:
             elems = self.el_list[self.n + 1:]
         if len(elems) == 2 and elems[1] != 'H':
-            elems = elems[0]
+            x = elems[0]
+            elems.clear()
+            elems.append(x)
         self.spart_list = elems
         return ''.join(map(str, elems))
 
 
-Hydrogen = Substance(['H', 2])
-Water = Substance(['H', 2, 'O'])
-
 if __name__ == '__main__':
-    dioxide = Substance(['Fe', 2, 'O', 3])
-    print(dioxide.get_fpart())
-    print(dioxide.get_spart())
-    print(dioxide.get_name(), dioxide.get_oxi())
+    dioxide = Substance(['Al', 'Cl', 3])
+    oxire = Substance([3, 'Na', 'O', 'H'])
+    print(dioxide.get_particles_number())
+    print(list(map(str, (oxire + dioxide))))

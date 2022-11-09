@@ -1,20 +1,19 @@
 import sys
-from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
-from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import QApplication
+from PyQt5 import QtGui
 from Substance import Substance
-from Theory import up, under
 from Class_father import Class_father
+from Sub_name import Ui_MainWindow
 
 
 class DoesNotExistError(Exception):
     pass
 
 
-class Sub_name(Class_father):
+class Sub_name(Ui_MainWindow, Class_father):
     def __init__(self, parent=None, *args):
         super().__init__()
-        uic.loadUi('Sub_name.ui', self)
+        self.setupUi(self)
         self.setWindowIcon(QtGui.QIcon('Chemical Romance round logo.svg'))
         self.parenter = parent
         self.initUI()

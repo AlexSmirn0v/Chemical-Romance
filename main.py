@@ -1,19 +1,20 @@
 import sys
-from PyQt5 import uic
+
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5 import QtCore, QtGui
+from PyQt5 import QtGui
 from PyQt5.QtGui import QPixmap
 
 from Chem_calc_prog import Chem_calc
 from Elem_parameters_prog import Elem_parameters
 from Sub_name_prog import Sub_name
 from Sub_parameters_prog import Sub_parameters
+from Start_page import Ui_MainWindow
 
 
-class MyWidget(QMainWindow):
+class MyWidget(Ui_MainWindow, QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('Start_page.ui', self)
+        self.setupUi(self)
         self.setWindowIcon(QtGui.QIcon('Chemical Romance round logo.svg'))
         self.initUI()
 

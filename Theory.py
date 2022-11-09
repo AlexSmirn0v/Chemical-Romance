@@ -2,6 +2,7 @@ import csv
 import sqlite3
 from pymorphy2 import MorphAnalyzer
 import sympy as sym
+from math import lcm
 
 
 class DoesNotExistError(Exception):
@@ -27,45 +28,11 @@ NAME = {'NO3': ['Нитрат', 'Азотная', 'HNO3'], 'NO2': ['Нитрит
         'CrO4': ['Хромат', 'Хромовая', 'H2CrO4'], 'Cr2O7': ['Дихромат', 'Дихромовая', 'H2Cr2O7'],
         'MnO4': ['Манганат', 'Марганцовистая', 'HMnO4', 'H2MnO4'], 'ClO4': ['Перхлорат', 'Хлорная', 'HClO4'],
         'ClO3': ['Хлорат', 'Хлорноватая', 'HClO3'], 'ClO2': ['Хлорит', 'Хлористая', 'HClO2'],
-        'ClO': ['Гипохлорит', 'Хлорноватистая', 'HClO'], 'IO6': ['Ортойодат', 'Ортойодная', 'H5IO6'],
+        'Cl': ['Хлорид', 'Соляная', 'HCl'], 'ClO': ['Гипохлорит', 'Хлорноватистая', 'HClO'],
+        'IO6': ['Ортойодат', 'Ортойодная', 'H5IO6'],
         'IO4': ['Метайодат', 'Метайодная', 'HJO4'], 'IO': ['Гипойодит', 'Йодноватистая', 'HIO'],
         'CN': ['Цианид', 'Синильная', 'HCN'], 'F': ['Фторид', 'Плавиковая', 'HF']
         }
-
-stroker = '''HNO3 Азотная NO3 Нитрат
-HNO2 Азотистая NO2 Нитрит
-H2SO4 Серная SO4 Сульфат
-H2S2O7 Дисерная S2O7 Дисульфат
-H2SO3 Сернистая SO3 Сульфит
-H2S2O3 Тиосерная S2O3 Тиосульфат
-H2S Сероводородная S2 Сульфид
-H2CO3 Угольная CO3 Карбонат
-H3PO4 Ортофосфорная PO4 Ортофосфат
-HPO3 Метафосфорная PO3 метафосфат
-H4P2O7 Пирофосфорная,дифосфорная P2O7 Дифосфат
-H3PO3 Ортофосфористая PO3 Ортофосфит
-HPO2 Метафосфористая PO2 Метафосфит
-H3BO3 Ортоборная BO3 Ортоборат
-HBO2 Метаборная BO2 Метаборат
-H4SiO4 Ортокремниевая SiO4 Ортосиликат
-H2SiO3 Метакремниевая SiO3 Метасиликат
-H3AsO4 Мышьяковая AsO4 Арсенат
-H3AsO3 Мышьяковистая AsO3 Арсенит
-H2SeO4 Селеновая SeO4 Селенат
-H2SeO3 Селенистая SeO3 Селенит
-H2CrO4 Хромовая CrO4 Хромат
-H2Cr2O7 Дихромовая Cr2O7 Дихромат
-HMnO4 Марганцовая MnO4 Перманганат
-H2MnO4 Марганцовистая MnO4 Манганат
-HClO4 Хлорная ClO4 Перхлорат
-HClO3 Хлорноватая ClO3 Хлорат
-HClO2 Хлористая ClO2 Хлорит
-HClO Хлорноватистая ClO Гипохлорит
-H5IO6 Ортойодная IO6 Ортойодат
-HJO4 Метайодная IO4 Метайодат
-HIO Йодноватистая IO Гипойодит
-HCN Синильная CN Цианид
-HF Плавиковая F Фторид'''
 
 
 def under(stroke):
@@ -132,7 +99,43 @@ def charge(ion):
                     return int(row['Заряд -'])
 
 
+def substance_maker(begin_part_list, end_part_list, begin_part_number, end_part_number):
+    elems_list_1 = list()
+    begin_part = ''.join(map(str, begin_part_list))
+    end_part = ''.join(map(str, end_part_list))
+    sum_charge = lcm(abs(charge(begin_part)), abs(charge(end_part)))
+    begin_number = sum_charge // abs(charge(begin_part))
+    end_number = sum_charge // abs(charge(end_part))
+
+    if begin_part_number / begin_number == end_part_number / end_number:
+        if int(begin_part_number / begin_number) != 1:
+            elems_list_1.append(int(begin_part_number / begin_number))
+    else:
+        print(begin_part_number, end_part_number)
+        print(begin_part_number / begin_number)
+        print(end_part_number / end_number)
+        raise DoesNotExistError
+
+    elems_list_1.extend(begin_part_list)
+    if begin_number != 1 and len(begin_part_list) > 1:
+        elems_list_1.insert(0, '(')
+        elems_list_1.append(')')
+        elems_list_1.append(begin_number)
+    elif begin_number != 1:
+        elems_list_1.append(begin_number)
+
+    if end_number != 1 and len(end_part_list) > 1:
+        elems_list_1.append('(')
+        elems_list_1.extend(end_part_list)
+        elems_list_1.append(')')
+        elems_list_1.append(end_number)
+    elif end_number != 1:
+        elems_list_1.extend(end_part_list)
+        elems_list_1.append(end_number)
+    else:
+        elems_list_1.extend(end_part_list)
+    return elems_list_1
+
+
 if __name__ == '__main__':
-    res = sym.var('x')
-    print(res)
-    print(charge('H'), charge('SO4'))
+    print(substance_maker(['Na'], ['S', 'O', 4], 2, 1))

@@ -1,7 +1,7 @@
-from PyQt5 import uic, QtWidgets
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
 from PyQt5 import QtCore, QtGui
-from Theory import up, under
+from Theory import under
 
 
 class Class_father(QMainWindow):
@@ -110,6 +110,8 @@ class Class_father(QMainWindow):
     def htmler(self, text):
         self.html = self.textBrowser.toHtml().split('<')
         self.html[-4] += text
+        print(text)
+        print()
         self.textBrowser.setHtml('<'.join(self.html))
 
     def create_menu(self):

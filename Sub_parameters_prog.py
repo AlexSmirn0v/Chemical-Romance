@@ -1,23 +1,24 @@
 import sys
-from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
-from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import QApplication
+from PyQt5 import QtGui
 
 from Substance import Substance
-from Theory import up, under, isSoluble
+from Theory import isSoluble
 from Class_father import Class_father
+from Sub_parameters import Ui_MainWindow
 
 
-class Sub_parameters(Class_father):
+class Sub_parameters(Ui_MainWindow, Class_father):
     def __init__(self, parent=None, *args):
         super().__init__()
-        uic.loadUi('Sub_parameters.ui', self)
+        self.setupUi(self)
         self.setWindowIcon(QtGui.QIcon('Chemical Romance round logo.svg'))
         self.parenter = parent
         self.initUI()
         if args:
             self.first_sub = Substance(args[0][0])
             self.temp_list = args[0][0]
+            print(str(self.first_sub))
             self.htmler(str(self.first_sub))
 
     def resulter(self):
