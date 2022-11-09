@@ -1,5 +1,5 @@
 from Theory import up, under, isSoluble, elem_parameters, CATIONS, ANIONS, NAME, gentle, \
-    charge, substance_maker, METAL_ACTIVENESS
+    charge, substance_maker, METAL_ACTIVENESS, ACID_STRENGTH, acid_maker
 import sympy as sym
 from math import lcm
 
@@ -105,7 +105,18 @@ class Substance:
                 elems_list_2.extend(Water)
             elif {self.get_type(), other.get_type()} in [{'Кислотный оксид', 'Щёлочь'},
                                                          {'Амфотерный оксид', 'Щёлочь'}]:
-                pass
+                alkali = list(filter(lambda x: x.get_type() == 'Щёлочь', [self, other]))[0]
+                oxide = list(filter(lambda x: x.get_type() != 'Щёлочь', [self, other]))[0]
+                if type(oxide.el_list[0]) == int:
+                    ox_koef = oxide.el_list[0]
+                else:
+                    ox_koef = 1
+                wat_koef = alkali.get_particles_number()[1] - 1
+                acid = Substance(acid_maker(oxide.el_list, ox_koef, wat_koef))
+                elems_list_1 = substance_maker(alkali.fpart_list, acid.spart_list,
+                                               alkali.get_particles_number()[0], acid.get_particles_number()[1])
+                elems_list_2 = Water
+
             elif {self.get_type(), other.get_type()} == {'Соль', 'Щёлочь'}:
                 salt = list(filter(lambda x: x.get_type() == 'Соль', [self, other]))[0]
                 alkali = list(filter(lambda x: x.get_type() != 'Соль', [self, other]))[0]
@@ -122,7 +133,22 @@ class Substance:
                     else:
                         raise DoesNotExistError
             elif {self.get_type(), other.get_type()} == {'Соль', 'Кислота'}:
-                pass
+                salt = list(filter(lambda x: x.get_type() == 'Соль', [self, other]))[0]
+                acid = list(filter(lambda x: x.get_type() != 'Соль', [self, other]))[0]
+
+                if isSoluble(salt):
+                    elems_list_1 = substance_maker(salt.fpart_list, acid.spart_list,
+                                                   salt.part_number[0], acid.part_number[1])
+                    elems_list_2 = substance_maker(acid.fpart_list, salt.spart_list,
+                                                   acid.part_number[0], salt.part_number[1])
+                    isWeaker = (ACID_STRENGTH.index(Substance(elems_list_2).only_el_str) >
+                                ACID_STRENGTH.index(acid.only_el_str))
+                    if isSoluble(Substance(elems_list_1)) and not isWeaker:
+                        pass
+                    elif isWeaker and not isSoluble(Substance(elems_list_1)):
+                        pass
+                    else:
+                        raise DoesNotExistError
             elif (self.get_type() and other.get_type()) == 'Соль':
                 f_salt = self
                 s_salt = other
@@ -140,13 +166,29 @@ class Substance:
                         raise DoesNotExistError
 
             elif {self.get_type(), other.get_type()} == {'Кислотный оксид', 'Вода'}:
-                pass
+                water = list(filter(lambda x: x.only_el_str == 'H2O', [self, other]))[0]
+                oxide = list(filter(lambda x: x.only_el_str != 'H2O', [self, other]))[0]
+                if type(oxide.el_list[0]) == int:
+                    ox_koef = oxide.el_list[0]
+                else:
+                    ox_koef = 1
+                if type(water.el_list[0]) == int:
+                    wat_koef = water.el_list[0]
+                else:
+                    wat_koef = 1
+                if oxide.only_el_str != 'SiO2':
+                    elems_list_1 = acid_maker(oxide.el_list, ox_koef, wat_koef)
+                    return Substance(elems_list_1, html=True),
+                else:
+                    raise DoesNotExistError
             elif {self.get_type(), other.get_type()} == {'Основный оксид', 'Вода'}:
                 water = list(filter(lambda x: x.only_el_str == 'H2O', [self, other]))[0]
                 oxide = list(filter(lambda x: x.only_el_str != 'H2O', [self, other]))[0]
                 if oxide.get_fpart() in METAL_ACTIVENESS[:METAL_ACTIVENESS.index('Mg')]:
                     elems_list_1 = substance_maker(oxide.fpart_list, ["O", 'H'],
                                                    oxide.get_particles_number()[0], water.get_particles_number()[0])
+                    if type(elems_list_1) == str:
+                        raise DoesNotExistError
                     return Substance(elems_list_1, html=True),
             else:
                 print({self.get_type(), other.get_type()} in [{'Основный оксид', 'Кислота'},
@@ -155,7 +197,7 @@ class Substance:
             return Substance(elems_list_1, html=True), Substance(elems_list_2, html=True)
         except DoesNotExistError:
             return '''Ошибка ввода или невозможная реакция. 
-            Возможно, опечатка в коэффициентах'''
+            Возможно, опечатка в коэффициентах''',
 
     def get_particles_number(self):
         try:
@@ -374,7 +416,6 @@ class Substance:
 
 
 if __name__ == '__main__':
-    dioxide = Substance(['Al', 'Cl', 3])
-    oxire = Substance([3, 'Na', 'O', 'H'])
-    print(dioxide.get_particles_number())
-    print(list(map(str, (oxire + dioxide))))
+    dioxide = Substance([2, 'Na',  'O', 'H'])
+    oxire = Substance(['S', 'O', 3])
+    print(' + '.join((map(str, (oxire + dioxide)))))

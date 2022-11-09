@@ -23,9 +23,10 @@ class Chem_calc(Ui_MainWindow, Class_father):
         self.sec_sub = Substance(self.temp_list)
         print(self.first_sub)
         tulip = self.first_sub + self.sec_sub
-        print(tulip)
+        print(' + '.join(map(str, tulip)))
         self.htmler(' => ' + ' + '.join(map(str, tulip)))
-        self.temp_list = tulip[0]
+        if tulip[0] is Substance:
+            self.temp_list = tulip[0].el_list
 
     def pluser(self):
         self.htmler(' + ')

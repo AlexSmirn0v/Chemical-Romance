@@ -1,8 +1,9 @@
 import csv
 import sqlite3
+from functools import reduce
+
 from pymorphy2 import MorphAnalyzer
-import sympy as sym
-from math import lcm
+from math import lcm, gcd
 
 
 class DoesNotExistError(Exception):
@@ -11,6 +12,7 @@ class DoesNotExistError(Exception):
 
 METAL_ACTIVENESS = ['Li', 'Cs', 'Rb', 'K', 'Ba', 'Sr', 'Ca', 'Na', 'Mg', 'Al', 'Ti', 'Mn', 'Zn', 'Cr',
                     'Fe', 'Cd', 'Co', 'Ni', 'Sn', 'Pb', 'H', 'Sb', 'Bi', 'Cu', 'Hg', 'Ag', 'Pd', 'Pt', 'Au']
+ACID_STRENGTH = ['HCN', 'H2S', 'H2CO3', 'HF', 'H3PO4', 'H2SO3', 'HNO3', 'H2SO4', 'HCl', 'HBr']
 CATIONS = ['H', 'Li', 'K', 'Na', 'NH4', 'Mg', 'Ca', 'Ba', 'Sr', 'Al', 'Cr', 'Fe', 'Fe', 'Zn', 'Ag', 'Pb',
            'Cu', 'Hg', 'Hg', 'Mn', 'Sn', 'Ni', 'Со', 'Be']
 ANIONS = ['F', 'Cl', 'Br', 'I', 'S', 'SO3', 'SO4', 'PO4', 'CO3', 'SiO3', 'NO3', 'CH3COO', 'CrO4', 'ClO4', 'NO2']
@@ -137,5 +139,43 @@ def substance_maker(begin_part_list, end_part_list, begin_part_number, end_part_
     return elems_list_1
 
 
+def acid_maker(end_part_list, salt_number, water_number):
+    if type(end_part_list[0]) == int:
+        del end_part_list[0]
+    for i in end_part_list:
+        i *= salt_number if type(i) == int else 1
+    if type(end_part_list[-1]) == int:
+        end_part_list[-1] += water_number
+    else:
+        end_part_list.append(water_number)
+    comp_number = (reduce(gcd, filter(lambda x: type(x) == int, end_part_list))
+                   if len(list(filter(lambda x: type(x) == int, end_part_list))) > 1 else 1)
+    try:
+        for numb in range(len(end_part_list)):
+            if type(end_part_list[numb]) == int and end_part_list[numb] != comp_number:
+                end_part_list[numb] //= comp_number
+            elif end_part_list[numb] == comp_number:
+                del end_part_list[numb]
+    except IndexError:
+        pass
+    res_acid = list()
+    if comp_number != 1:
+        res_acid.append(comp_number)
+
+    try:
+        for index, elem in enumerate(NAME[''.join(map(str, end_part_list))][2]):
+            if elem.isnumeric():
+                res_acid.append(int(elem))
+            elif elem.isupper():
+                if NAME[''.join(map(str, end_part_list))][2][index + 1].islower():
+                    res_acid.append(''.join([elem, NAME[''.join(map(str, end_part_list))][2][index + 1]]))
+                else:
+                    res_acid.append(elem)
+    except KeyError:
+        return '''Ошибка ввода или невозможная реакция. 
+            Возможно, опечатка в коэффициентах'''
+    return res_acid
+
+
 if __name__ == '__main__':
-    print(substance_maker(['Na'], ['S', 'O', 4], 2, 1))
+    print(acid_maker(['S', 'O', 3], 1, 1))

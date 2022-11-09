@@ -110,8 +110,6 @@ class Class_father(QMainWindow):
     def htmler(self, text):
         self.html = self.textBrowser.toHtml().split('<')
         self.html[-4] += text
-        print(text)
-        print()
         self.textBrowser.setHtml('<'.join(self.html))
 
     def create_menu(self):
